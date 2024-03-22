@@ -1298,16 +1298,16 @@ const Builder = () => {
           <div className="mt-5">
             <h2 className="p-3 text-lg">Response Preview</h2>
             <div className="lg:m-5 md:m-3 bg-black rounded">
-              <ul className="flex">
+              <ul className="flex [&_li]:p-3 [&_li]:cursor-pointer">
                 <li
                   onClick={() => setResponseTab("raw")}
-                  className="p-3 cursor-pointer"
+                  className={responseTab=="raw"?"bg-[#ff4b00]":""}
                 >
                   Raw
                 </li>
                 <li
                   onClick={() => setResponseTab("decoded")}
-                  className="p-3 cursor-pointer"
+                  className={responseTab=="decoded"?"bg-[#ff4b00]":""}
                 >
                   Decoded
                 </li>
