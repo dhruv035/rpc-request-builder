@@ -155,7 +155,6 @@ const Builder = () => {
         rules: [],
         colors: {
           'editor.background':'#000000',
-          
         },
       })
      monaco.editor.setTheme('my-theme') 
