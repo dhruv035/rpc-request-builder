@@ -18,3 +18,9 @@ body {
   color: rgb(var(--foreground-rgb));
   background: rgb(var(--background-rgb));
 }
+
+select {
+  .select-items {
+    background-color: black;
+  }
+}

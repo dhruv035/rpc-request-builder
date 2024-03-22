@@ -33,6 +33,7 @@ import {
   formatStarknetRsParamsSimulationFlags,
   toCamelCase,
 } from "./utils";
+import Select from "./UI/Select";
 
 const formatName = (name: string) => {
   // Make first letter uppercase
@@ -154,10 +155,10 @@ const Builder = () => {
         inherit: true,
         rules: [],
         colors: {
-          'editor.background':'#000000',
+          'editor.background': '#000000',
         },
       })
-     monaco.editor.setTheme('my-theme') 
+      monaco.editor.setTheme('my-theme')
     }
   }, [monaco])
   const updateRpcUrl = (newRpcUrl: string, oldRpcUrl: string) => {
@@ -1002,6 +1003,10 @@ const Builder = () => {
     );
   };
 
+  //My test for select
+
+  const [selecteda, setSelectedA] = useState<string>(MAINNET_RPC_URL)
+  console.log("SEKECtEDA", selecteda)
   return (
     <>
       <div className="lg:flex lg:m-5 md:m-3 bg-black border-[#ff4b00] text-sm">
@@ -1042,12 +1047,20 @@ const Builder = () => {
                     setRpcUrl(e.target.value);
                     updateRpcUrl(e.target.value, oldRpcUrl);
                   }}
-                  className="bg-black border border-[#3e3e43] rounded-sm p-2 w-full"
+                  className="[&.select-items]:bg-black bg-black border border-[#3e3e43] rounded-sm p-2 w-full"
                 >
                   <option value={MAINNET_RPC_URL}>Mainnet</option>
                   <option value={GOERLI_RPC_URL}>Goerli</option>
                   <option value={SEPOLIA_RPC_URL}>Sepolia</option>
                 </select>
+                <Select 
+                options={[
+                  { label: "Mainnet", value: MAINNET_RPC_URL }, 
+                  { label: "Goerli", value: GOERLI_RPC_URL }, 
+                  { label: "Sepolia", value: SEPOLIA_RPC_URL }
+                ]} 
+                  selected={selecteda} 
+                  setSelected={setSelectedA} />
                 <p
                   onClick={() => {
                     getCustomRpcUrl();
@@ -1163,21 +1176,21 @@ const Builder = () => {
                 <li
                   onClick={() => setRequestTab("raw")}
                   id="raw"
-                  className={requestTab=="raw"?"bg-[#ff4b00]":""}
+                  className={requestTab == "raw" ? "bg-[#ff4b00]" : ""}
                 >
                   Raw
                 </li>
                 <li
                   onClick={() => setRequestTab("curl")}
                   id="curl"
-                  className={requestTab=="curl"?"bg-[#ff4b00]":""}
+                  className={requestTab == "curl" ? "bg-[#ff4b00]" : ""}
                 >
                   cURL
                 </li>
                 {method.starknetJs && (
                   <li
                     onClick={() => setRequestTab("starknetJs")}
-                    className={requestTab=="starknetJs"?"bg-[#ff4b00]":""}
+                    className={requestTab == "starknetJs" ? "bg-[#ff4b00]" : ""}
                   >
                     starknet.js
                   </li>
@@ -1185,7 +1198,7 @@ const Builder = () => {
                 {method.starknetGo && (
                   <li
                     onClick={() => setRequestTab("starknetGo")}
-                    className={requestTab=="starknetGo"?"bg-[#ff4b00]":""}
+                    className={requestTab == "starknetGo" ? "bg-[#ff4b00]" : ""}
                   >
                     starknet.go
                   </li>
@@ -1193,7 +1206,7 @@ const Builder = () => {
                 {method.starknetRs && (
                   <li
                     onClick={() => setRequestTab("starknetRs")}
-                    className={requestTab=="starknetRs"?"bg-[#ff4b00]":""}
+                    className={requestTab == "starknetRs" ? "bg-[#ff4b00]" : ""}
                   >
                     starknet.rs
                   </li>
@@ -1301,13 +1314,13 @@ const Builder = () => {
               <ul className="flex [&_li]:p-3 [&_li]:cursor-pointer">
                 <li
                   onClick={() => setResponseTab("raw")}
-                  className={responseTab=="raw"?"bg-[#ff4b00]":""}
+                  className={responseTab == "raw" ? "bg-[#ff4b00]" : ""}
                 >
                   Raw
                 </li>
                 <li
                   onClick={() => setResponseTab("decoded")}
-                  className={responseTab=="decoded"?"bg-[#ff4b00]":""}
+                  className={responseTab == "decoded" ? "bg-[#ff4b00]" : ""}
                 >
                   Decoded
                 </li>

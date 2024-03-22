@@ -15,6 +15,7 @@ const config: Config = {
       },
       colors: {
         "gray-bg": "#1c1c1f",
+        "theme-orange":"#ff4b00",
       },
       lineHeight: {
         custom: "1.25rem",
