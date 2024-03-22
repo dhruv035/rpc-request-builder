@@ -22,9 +22,9 @@ const Select: React.FC<Props> = ({ options, selected, setSelected }) => {
         </p>
         {
             isOpen && <ul className="p-2 absolute bg-black w-full lg:max-w-[400px]">
-                {options.map((option: FieldData) => {
+                {options.map((option: FieldData,index) => {
 
-                    return <li className="p-2 hover:border-[1px] hover:border-theme-orange  w-full my-2" onClick={() => { setSelected(option.value), setIsOpen(false) }}>{option.label}</li>
+                    return <li key={index} className="p-2 hover:border-[1px] hover:border-theme-orange  w-full my-2" onClick={() => { setSelected(option.value), setIsOpen(false) }}>{option.label}</li>
                 })}
             </ul>
         }
