@@ -2,7 +2,7 @@
 
 import { useState, useEffect, useRef } from "react";
 import { Methods } from "@/api/rpcspec";
-import Editor from "@monaco-editor/react";
+import Editor, { useMonaco } from "@monaco-editor/react";
 import {
   MAINNET_RPC_URL,
   GOERLI_RPC_URL,
@@ -40,6 +40,7 @@ const formatName = (name: string) => {
   // turn _ into space
   return name.replace(/_/g, " ");
 };
+
 
 const Builder = () => {
   const transformParamsToArray = (params: any) => {
@@ -85,18 +86,19 @@ const Builder = () => {
 
     return params
       ? Object.entries(params).flatMap(([name, value]) => {
-          if (Array.isArray(value)) {
-            let values = value.map((param: any) => {
-              return transformParam(param);
-            });
+        if (Array.isArray(value)) {
+          let values = value.map((param: any) => {
+            return transformParam(param);
+          });
 
-            return { name, value: values };
-          }
-          return { name, value: transformParam(value) };
-        })
+          return { name, value: values };
+        }
+        return { name, value: transformParam(value) };
+      })
       : [];
   };
 
+  const monaco = useMonaco();
   const [method, setMethod] = useState(Methods[0]);
   const [paramsArray, setParamsArray] = useState(
     Methods[0].params ? transformParamsToArray(Methods[0].params) : []
@@ -125,12 +127,12 @@ const Builder = () => {
         requestTab == "raw"
           ? rawRequest
           : requestTab == "curl"
-          ? curlRequest
-          : requestTab === "starknetJs"
-          ? starknetJs
-          : requestTab === "starknetGo"
-          ? starknetGo
-          : starknetRs
+            ? curlRequest
+            : requestTab === "starknetJs"
+              ? starknetJs
+              : requestTab === "starknetGo"
+                ? starknetGo
+                : starknetRs
       );
     } else {
       navigator.clipboard.writeText(response);
@@ -144,6 +146,21 @@ const Builder = () => {
     return rpcUrl;
   };
 
+
+  useEffect(() => {
+    if (monaco) {
+      monaco.editor.defineTheme('my-theme', {
+        base: 'vs-dark',
+        inherit: true,
+        rules: [],
+        colors: {
+          'editor.background':'#000000',
+          
+        },
+      })
+     monaco.editor.setTheme('my-theme') 
+    }
+  }, [monaco])
   const updateRpcUrl = (newRpcUrl: string, oldRpcUrl: string) => {
     // remove everything before the first \
     let dataPart = curlRequest.split("\\")[1];
@@ -216,8 +233,8 @@ const Builder = () => {
           (acc: ParamsObject, [key, value]) => {
             acc[key] = Array.isArray(value)
               ? value.map((val) =>
-                  constructParams(val, key === "entry_point_selector")
-                )
+                constructParams(val, key === "entry_point_selector")
+              )
               : constructParams(value, key === "entry_point_selector");
             return acc;
           },
@@ -988,7 +1005,7 @@ const Builder = () => {
 
   return (
     <>
-      <div className="lg:flex lg:m-5 md:m-3 bg-gray-bg text-sm">
+      <div className="lg:flex lg:m-5 md:m-3 bg-black text-sm">
         <div className="sm:w-full lg:w-1/3 p-3">
           <h2 className="my-2 text-lg">Configure Request</h2>
           <div className="my-5">
@@ -1026,7 +1043,7 @@ const Builder = () => {
                     setRpcUrl(e.target.value);
                     updateRpcUrl(e.target.value, oldRpcUrl);
                   }}
-                  className="bg-gray-bg border border-[#3e3e43] rounded-sm p-2 w-full"
+                  className="bg-black border border-[#3e3e43] rounded-sm p-2 w-full"
                 >
                   <option value={MAINNET_RPC_URL}>Mainnet</option>
                   <option value={GOERLI_RPC_URL}>Goerli</option>
@@ -1050,7 +1067,7 @@ const Builder = () => {
                     const newApiKey = e.target.value;
                     setApiKey(newApiKey);
                   }}
-                  className="bg-gray-bg border border-[#3e3e43] rounded-sm p-2 w-full mt-2"
+                  className="bg-black border border-[#3e3e43] rounded-sm p-2 w-full mt-2"
                   placeholder="API Key"
                   type="password"
                 />
@@ -1076,7 +1093,7 @@ const Builder = () => {
                 setMethod(Methods[index]);
                 setParamsArray(latestParamsArray);
               }}
-              className="bg-gray-bg border border-[#3e3e43] rounded-sm p-2 w-full mt-2"
+              className="bg-black border border-[#3e3e43] rounded-sm p-2 w-full mt-2"
             >
               {Methods.map((method, index) => (
                 <option key={method.name} value={index}>
@@ -1132,7 +1149,7 @@ const Builder = () => {
               onClick={() => {
                 sendRequest();
               }}
-              className="bg-[#3e3e43] text-white rounded-sm p-2 w-1/2 mt-2"
+              className="bg-black text-white rounded-sm p-2 w-1/2 mt-6 border-[#ff4b00] hover:bg-[#ff4b00] border-2"
               disabled={isLoading}
             >
               Send Request
@@ -1142,7 +1159,7 @@ const Builder = () => {
         <div className="lg:w-2/3">
           <div>
             <h2 className="p-3 mt-3 text-lg">Request Preview</h2>
-            <div className="lg:m-5 md:m-3 bg-[#232326] rounded">
+            <div className="lg:m-5 md:m-3 bg-black rounded">
               <ul className="flex">
                 <li
                   onClick={() => setRequestTab("raw")}
@@ -1181,7 +1198,7 @@ const Builder = () => {
                   </li>
                 )}
               </ul>
-              <div className="bg-[#1e1e1e]">
+              <div className="bg-black">
                 <button
                   onClick={() => copyToClipboard("request")}
                   className="p-3 float-right"
@@ -1192,7 +1209,7 @@ const Builder = () => {
                   <Editor
                     height="30vh"
                     language="json"
-                    theme="vs-dark"
+                    theme="my-theme"
                     value={rawRequest}
                     options={{
                       readOnly: true,
@@ -1209,7 +1226,7 @@ const Builder = () => {
                   <Editor
                     height="30vh"
                     language="shell"
-                    theme="vs-dark"
+                    theme="my-theme"
                     value={curlRequest}
                     options={{
                       readOnly: true,
@@ -1226,7 +1243,7 @@ const Builder = () => {
                   <Editor
                     height="50vh"
                     language="javascript"
-                    theme="vs-dark"
+                    theme="my-theme"
                     value={starknetJs}
                     options={{
                       readOnly: true,
@@ -1243,7 +1260,7 @@ const Builder = () => {
                   <Editor
                     height="50vh"
                     language="go"
-                    theme="vs-dark"
+                    theme="my-theme"
                     value={starknetGo}
                     options={{
                       readOnly: true,
@@ -1261,7 +1278,7 @@ const Builder = () => {
                   <Editor
                     height="50vh"
                     language="rust"
-                    theme="vs-dark"
+                    theme="my-theme"
                     value={starknetRs}
                     options={{
                       readOnly: true,
@@ -1279,7 +1296,7 @@ const Builder = () => {
           </div>
           <div className="mt-5">
             <h2 className="p-3 text-lg">Response Preview</h2>
-            <div className="lg:m-5 md:m-3 bg-[#232326] rounded">
+            <div className="lg:m-5 md:m-3 bg-black rounded">
               <ul className="flex">
                 <li
                   onClick={() => setResponseTab("raw")}
@@ -1294,7 +1311,7 @@ const Builder = () => {
                   Decoded
                 </li>
               </ul>
-              <div className="bg-[#1e1e1e]">
+              <div className="bg-black">
                 <button
                   onClick={() => copyToClipboard("response")}
                   className="p-3 float-right"
@@ -1305,7 +1322,7 @@ const Builder = () => {
                   <Editor
                     height="30vh"
                     language="json"
-                    theme="vs-dark"
+                    theme="my-theme"
                     value={isLoading ? "Loading..." : response}
                     options={{
                       readOnly: true,
@@ -1322,7 +1339,7 @@ const Builder = () => {
                   <Editor
                     height="30vh"
                     language="json"
-                    theme="vs-dark"
+                    theme="my-theme"
                     value={isLoading ? "Loading..." : decodedResponse}
                     options={{
                       readOnly: true,
