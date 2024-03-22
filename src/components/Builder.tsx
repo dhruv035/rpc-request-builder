@@ -1004,7 +1004,7 @@ const Builder = () => {
 
   return (
     <>
-      <div className="lg:flex lg:m-5 md:m-3 bg-black text-sm">
+      <div className="lg:flex lg:m-5 md:m-3 bg-black border-[#ff4b00] text-sm">
         <div className="sm:w-full lg:w-1/3 p-3">
           <h2 className="my-2 text-lg">Configure Request</h2>
           <div className="my-5">
@@ -1159,23 +1159,25 @@ const Builder = () => {
           <div>
             <h2 className="p-3 mt-3 text-lg">Request Preview</h2>
             <div className="lg:m-5 md:m-3 bg-black rounded">
-              <ul className="flex">
+              <ul className="flex [&_li]:p-3 [&_li]:cursor-pointer">
                 <li
                   onClick={() => setRequestTab("raw")}
-                  className="p-3 cursor-pointer"
+                  id="raw"
+                  className={requestTab=="raw"?"bg-[#ff4b00]":""}
                 >
                   Raw
                 </li>
                 <li
                   onClick={() => setRequestTab("curl")}
-                  className="p-3 cursor-pointer"
+                  id="curl"
+                  className={requestTab=="curl"?"bg-[#ff4b00]":""}
                 >
                   cURL
                 </li>
                 {method.starknetJs && (
                   <li
                     onClick={() => setRequestTab("starknetJs")}
-                    className="p-3 cursor-pointer"
+                    className={requestTab=="starknetJs"?"bg-[#ff4b00]":""}
                   >
                     starknet.js
                   </li>
@@ -1183,7 +1185,7 @@ const Builder = () => {
                 {method.starknetGo && (
                   <li
                     onClick={() => setRequestTab("starknetGo")}
-                    className="p-3 cursor-pointer"
+                    className={requestTab=="starknetGo"?"bg-[#ff4b00]":""}
                   >
                     starknet.go
                   </li>
@@ -1191,7 +1193,7 @@ const Builder = () => {
                 {method.starknetRs && (
                   <li
                     onClick={() => setRequestTab("starknetRs")}
-                    className="p-3 cursor-pointer"
+                    className={requestTab=="starknetRs"?"bg-[#ff4b00]":""}
                   >
                     starknet.rs
                   </li>
