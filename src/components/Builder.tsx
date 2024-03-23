@@ -753,6 +753,7 @@ const Builder = () => {
       }
     };
 
+    const [selected,setSelected]=useState<number>(param.value[param.index].name)
     return (
       <>
         {
@@ -813,7 +814,8 @@ const Builder = () => {
             ))
           ) : (
             <>
-              {param.value?.length > 0 ? (
+              {
+              param.value?.length > 0 ? (
                 <div>
                   <select
                     value={param.value[param.index].name}
@@ -844,6 +846,37 @@ const Builder = () => {
                       ))
                     }
                   </select>
+                  {
+                    
+                    <Select 
+                    options={param.value.map((option: any, index:number) => {
+            
+                    return {
+                      label: option.name,
+                      value: option.value
+                      }
+                    })
+                  }
+                    selected={param.value[param.index]}
+                    setSelected={(index:number)=>{
+                      setParamsArray((prevParamsArray) => {
+                        const updatedParamsArray =
+                          structuredClone(prevParamsArray);
+
+                        if (subKey === undefined) {
+                          updatedParamsArray[index].value.index =
+                          index
+                        } else {
+                          updatedParamsArray[index].value[subKey].index =
+                           index
+                        }
+
+                        return updatedParamsArray;
+                      });
+                      setSelected(index)
+                    }}
+                  />
+                  }
                   {param.value[param.index].enum ? (
                     <select
                       onChange={(e) => {
@@ -1006,6 +1039,7 @@ const Builder = () => {
   //My test for select
 
   const [selecteda, setSelectedA] = useState<string>(MAINNET_RPC_URL)
+  const [selectedb, setSelectedB] = useState<number>(0)
   console.log("SEKECtEDA", selecteda)
   return (
     <>
@@ -1041,7 +1075,7 @@ const Builder = () => {
               </div>
             ) : (
               <div>
-                <select
+                {/* <select
                   onChange={(e) => {
                     let oldRpcUrl = rpcUrl;
                     setRpcUrl(e.target.value);
@@ -1052,14 +1086,14 @@ const Builder = () => {
                   <option value={MAINNET_RPC_URL}>Mainnet</option>
                   <option value={GOERLI_RPC_URL}>Goerli</option>
                   <option value={SEPOLIA_RPC_URL}>Sepolia</option>
-                </select>
-                <Select 
-                options={[
-                  { label: "Mainnet", value: MAINNET_RPC_URL }, 
-                  { label: "Goerli", value: GOERLI_RPC_URL }, 
-                  { label: "Sepolia", value: SEPOLIA_RPC_URL }
-                ]} 
-                  selected={selecteda} 
+                </select> */}
+                <Select
+                  options={[
+                    { label: "Mainnet", value: MAINNET_RPC_URL },
+                    { label: "Goerli", value: GOERLI_RPC_URL },
+                    { label: "Sepolia", value: SEPOLIA_RPC_URL }
+                  ]}
+                  selected={selecteda}
                   setSelected={setSelectedA} />
                 <p
                   onClick={() => {
@@ -1079,7 +1113,7 @@ const Builder = () => {
                     const newApiKey = e.target.value;
                     setApiKey(newApiKey);
                   }}
-                  className="bg-black border border-[#3e3e43] rounded-sm p-2 w-full mt-2"
+                  className="bg-black border border-theme-orange rounded-sm lg:max-w-[400px] p-2 w-full mt-2"
                   placeholder="API Key"
                   type="password"
                 />
@@ -1095,7 +1129,7 @@ const Builder = () => {
                 </p>
               </div>
             )}
-            <select
+            {/* <select
               onChange={(e) => {
                 const index = parseInt(e.target.value);
                 const latestParamsArray = Methods[index].params
@@ -1112,7 +1146,25 @@ const Builder = () => {
                   {method.name}
                 </option>
               ))}
-            </select>
+            </select> */}
+            <Select options={Methods.map((method, index) => {
+              return {
+                label: method.name,
+                value: index
+              }
+            })}
+              selected={selectedb}
+              setSelected={(index: number) => {
+                const latestParamsArray = Methods[index].params
+                  ? transformParamsToArray(Methods[index].params)
+                  : [];
+
+                setMethod(Methods[index]);
+                setParamsArray(latestParamsArray);
+                setSelectedB(index)
+              }} />
+
+
             {
               // Loops through all parameters and renders them
               paramsArray.map((param, index) => (
