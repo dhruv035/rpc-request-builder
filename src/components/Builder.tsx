@@ -752,8 +752,6 @@ const Builder = () => {
         ] = el;
       }
     };
-
-    const [selected,setSelected]=useState<number>(param.value[param.index].name)
     return (
       <>
         {
@@ -815,15 +813,14 @@ const Builder = () => {
           ) : (
             <>
               {
-              param.value?.length > 0 ? (
-                <div>
-                  <select
+                param.value?.length > 0 ? (
+                  <div>
+                    {/* <select
                     value={param.value[param.index].name}
                     onChange={(e) => {
                       setParamsArray((prevParamsArray) => {
                         const updatedParamsArray =
                           structuredClone(prevParamsArray);
-
                         if (subKey === undefined) {
                           updatedParamsArray[index].value.index =
                             e.target.selectedIndex;
@@ -845,190 +842,242 @@ const Builder = () => {
                         </option>
                       ))
                     }
-                  </select>
-                  {
-                    
-                    <Select 
-                    options={param.value.map((option: any, index:number) => {
-            
-                    return {
-                      label: option.name,
-                      value: option.value
-                      }
-                    })
-                  }
-                    selected={param.value[param.index]}
-                    setSelected={(index:number)=>{
-                      setParamsArray((prevParamsArray) => {
-                        const updatedParamsArray =
-                          structuredClone(prevParamsArray);
+                  </select> */}
+                    {
 
-                        if (subKey === undefined) {
-                          updatedParamsArray[index].value.index =
-                          index
-                        } else {
-                          updatedParamsArray[index].value[subKey].index =
-                           index
+                      <Select
+                        className=" py-2 w-full mt-2"
+                        options={param.value.map((option: any, index: number) => {
+
+                          return {
+                            label: option.name,
+                            value: index,
+                          }
+                        })
                         }
+                        selected={param.index}
+                        setSelected={(selectIndex: number) => {
+                          setParamsArray((prevParamsArray) => {
+                            const updatedParamsArray =
+                              structuredClone(prevParamsArray);
+                            if (subKey === undefined) {
+                              updatedParamsArray[index].value.index =
+                                selectIndex
+                            } else {
+                              updatedParamsArray[index].value[subKey].index =
+                                selectIndex
+                            }
 
-                        return updatedParamsArray;
-                      });
-                      setSelected(index)
-                    }}
-                  />
-                  }
-                  {param.value[param.index].enum ? (
-                    <select
-                      onChange={(e) => {
-                        setParamsArray((prevParamsArray) => {
-                          const updatedParamsArray =
-                            structuredClone(prevParamsArray);
-                          let selectedIndex =
-                            updatedParamsArray[index].value.index;
-                          if (subKey === undefined) {
-                            let value: string | number =
-                              updatedParamsArray[index].value?.value[
+                            return updatedParamsArray;
+                          });
+                        }}
+                      />
+                    }
+                    {param.value[param.index].enum ? (
+                      (
+                        // <select
+                        //   onChange={(e) => {
+                        //     setParamsArray((prevParamsArray) => {
+                        //       const updatedParamsArray =
+                        //         structuredClone(prevParamsArray);
+                        //       let selectedIndex =
+                        //         updatedParamsArray[index].value.index;
+                        //       if (subKey === undefined) {
+                        //         let value: string | number =
+                        //           updatedParamsArray[index].value?.value[
+                        //             selectedIndex
+                        //           ].placeholder;
+
+                        //         value =
+                        //           typeof value === "number"
+                        //             ? parseInt(e.target.value) || 0
+                        //             : e.target.value;
+
+                        //         updatedParamsArray[index].value.value[
+                        //           selectedIndex
+                        //         ].placeholder = value;
+                        //       } else {
+                        //         selectedIndex =
+                        //           updatedParamsArray[index]?.value[subKey]?.index;
+                        //         let value: string | number =
+                        //           updatedParamsArray[index]?.value[subKey]?.value[
+                        //             selectedIndex
+                        //           ].placeholder;
+
+                        //         value =
+                        //           typeof value === "number"
+                        //             ? parseInt(e.target.value) || 0
+                        //             : e.target.value;
+
+                        //         updatedParamsArray[index].value[subKey].value[
+                        //           selectedIndex
+                        //         ].placeholder = value;
+                        //       }
+
+                        //       return updatedParamsArray;
+                        //     });
+                        //   }}
+                        //   className="bg-gray-bg border border-[#3e3e43] rounded-sm p-2 w-full mt-2"
+                        //   value={param.value[param.index]?.placeholder}
+                        // >
+                        //   {param.value[param.index].enum.map(
+                        //     (option: string, index: number) => (
+                        //       <option key={index} value={option}>
+                        //         {option}
+                        //       </option>
+                        //     )
+                        //   )}
+                        // </select>
+                        //  && 
+                        <Select
+                        className="my-4 lg:max-w-[100px]"
+                        listStyle={{
+                          maxWidth:100
+                        }}
+                          options={param.value[param.index].enum.map((option: string, index: number) => {
+                            return {
+                              label: option,
+                              value: option,
+                            }
+                          })}
+                          selected={param.value[param.index].placeholder}
+                          setSelected={(innerIndex: number) => {
+
+                            setParamsArray((prevParamsArray) => {
+                              const updatedParamsArray =
+                                structuredClone(prevParamsArray);
+                              let selectedIndex =
+                                updatedParamsArray[index].value.index;
+                              if (subKey === undefined) {
+                                let value: string | number =
+                                  updatedParamsArray[index].value?.value[
+                                    selectedIndex
+                                  ].placeholder;
+
+                                value =
+                                  innerIndex
+
+                                updatedParamsArray[index].value.value[
+                                  selectedIndex
+                                ].placeholder = value;
+                              } else {
+                                selectedIndex =
+                                  updatedParamsArray[index]?.value[subKey]?.index;
+                                let value: string | number =
+                                  updatedParamsArray[index]?.value[subKey]?.value[
+                                    selectedIndex
+                                  ].placeholder;
+
+                                value =
+                                  innerIndex
+
+                                updatedParamsArray[index].value[subKey].value[
+                                  selectedIndex
+                                ].placeholder = value;
+                              }
+
+                              return updatedParamsArray;
+                            });
+                          }}
+                        />)
+                    ) : param.value[param.index].fields ? (
+                      <FormatInputField
+                        param={param.value[param.index].fields}
+                        index={index}
+                        subKey={subKey}
+                        selectedIdx={param.index}
+                      />
+                    ) : (
+                      <input
+                        ref={(el) => setRef(el, index, subKey)}
+                        onChange={(e) => {
+                          setCurrentCursorPosition(e.target.selectionStart);
+
+                          setParamsArray((prevParamsArray) => {
+                            const updatedParamsArray =
+                              structuredClone(prevParamsArray);
+
+                            let selectedIndex =
+                              updatedParamsArray[index].value.index;
+                            if (subKey === undefined) {
+                              let value: string | number =
+                                updatedParamsArray[index].value?.value[
+                                  selectedIndex
+                                ].placeholder;
+
+                              value =
+                                typeof value === "number"
+                                  ? parseInt(e.target.value) || 0
+                                  : e.target.value;
+
+                              updatedParamsArray[index].value.value[
                                 selectedIndex
-                              ].placeholder;
+                              ].placeholder = value;
+                            } else {
+                              selectedIndex =
+                                updatedParamsArray[index]?.value[subKey]?.index;
+                              let value: string | number =
+                                updatedParamsArray[index]?.value[subKey]?.value[
+                                  selectedIndex
+                                ].placeholder;
 
-                            value =
-                              typeof value === "number"
-                                ? parseInt(e.target.value) || 0
-                                : e.target.value;
+                              value =
+                                typeof value === "number"
+                                  ? parseInt(e.target.value) || 0
+                                  : e.target.value;
 
-                            updatedParamsArray[index].value.value[
-                              selectedIndex
-                            ].placeholder = value;
-                          } else {
-                            selectedIndex =
-                              updatedParamsArray[index]?.value[subKey]?.index;
-                            let value: string | number =
-                              updatedParamsArray[index]?.value[subKey]?.value[
+                              updatedParamsArray[index].value[subKey].value[
                                 selectedIndex
-                              ].placeholder;
+                              ].placeholder = value;
+                            }
 
-                            value =
-                              typeof value === "number"
-                                ? parseInt(e.target.value) || 0
-                                : e.target.value;
+                            return updatedParamsArray;
+                          });
 
-                            updatedParamsArray[index].value[subKey].value[
-                              selectedIndex
-                            ].placeholder = value;
-                          }
-
-                          return updatedParamsArray;
-                        });
-                      }}
-                      className="bg-gray-bg border border-[#3e3e43] rounded-sm p-2 w-full mt-2"
-                      value={param.value[param.index]?.placeholder}
-                    >
-                      {param.value[param.index].enum.map(
-                        (option: string, index: number) => (
-                          <option key={index} value={option}>
-                            {option}
-                          </option>
-                        )
-                      )}
-                    </select>
-                  ) : param.value[param.index].fields ? (
-                    <FormatInputField
-                      param={param.value[param.index].fields}
-                      index={index}
-                      subKey={subKey}
-                      selectedIdx={param.index}
-                    />
-                  ) : (
-                    <input
-                      ref={(el) => setRef(el, index, subKey)}
-                      onChange={(e) => {
-                        setCurrentCursorPosition(e.target.selectionStart);
-
-                        setParamsArray((prevParamsArray) => {
-                          const updatedParamsArray =
-                            structuredClone(prevParamsArray);
-
-                          let selectedIndex =
-                            updatedParamsArray[index].value.index;
-                          if (subKey === undefined) {
-                            let value: string | number =
-                              updatedParamsArray[index].value?.value[
-                                selectedIndex
-                              ].placeholder;
-
-                            value =
-                              typeof value === "number"
-                                ? parseInt(e.target.value) || 0
-                                : e.target.value;
-
-                            updatedParamsArray[index].value.value[
-                              selectedIndex
-                            ].placeholder = value;
-                          } else {
-                            selectedIndex =
-                              updatedParamsArray[index]?.value[subKey]?.index;
-                            let value: string | number =
-                              updatedParamsArray[index]?.value[subKey]?.value[
-                                selectedIndex
-                              ].placeholder;
-
-                            value =
-                              typeof value === "number"
-                                ? parseInt(e.target.value) || 0
-                                : e.target.value;
-
-                            updatedParamsArray[index].value[subKey].value[
-                              selectedIndex
-                            ].placeholder = value;
-                          }
-
-                          return updatedParamsArray;
-                        });
-
-                        setFocusKey(createRefKey(index, subKey));
-                        setInputFocused(true);
-                      }}
-                      className="bg-gray-bg border border-[#3e3e43] rounded-sm p-2 w-full mt-2"
-                      value={
-                        Array.isArray(param.value[param.index]?.placeholder)
-                          ? param.value[param.index]?.placeholder?.join(",")
-                          : param.value[param.index]?.placeholder
-                      }
-                    />
-                  )}
-                </div>
-              ) : (
-                <div>
-                  {Array.isArray(param.placeholder) ? (
-                    <textarea
-                      ref={(el) => setRef(el, index, subKey)}
-                      onChange={(e) => {
-                        handleOrdinaryParamChange(
-                          e.target.value || "0x",
-                          index,
-                          subKey,
-                          e.target.selectionStart
-                        );
-                      }}
-                      className="bg-gray-bg border border-[#3e3e43] rounded-sm p-2 w-full mt-2"
-                      value={JSON.stringify(param.placeholder, null, 2)}
-                    />
-                  ) : (
-                    <input
-                      ref={(el) => setRef(el, index, subKey)}
-                      onChange={(e) => {
-                        handleOrdinaryParamChange(
-                          e.target.value || "0x",
-                          index,
-                          subKey
-                        );
-                      }}
-                      className="bg-gray-bg border border-[#3e3e43] rounded-sm p-2 w-full mt-2"
-                      value={param.placeholder}
-                    />
-                  )}
-                </div>
-              )}
+                          setFocusKey(createRefKey(index, subKey));
+                          setInputFocused(true);
+                        }}
+                        className="bg-gray-bg border border-[#3e3e43] rounded-sm p-2 w-full mt-2"
+                        value={
+                          Array.isArray(param.value[param.index]?.placeholder)
+                            ? param.value[param.index]?.placeholder?.join(",")
+                            : param.value[param.index]?.placeholder
+                        }
+                      />
+                    )}
+                  </div>
+                ) : (
+                  <div>
+                    {Array.isArray(param.placeholder) ? (
+                      <textarea
+                        ref={(el) => setRef(el, index, subKey)}
+                        onChange={(e) => {
+                          handleOrdinaryParamChange(
+                            e.target.value || "0x",
+                            index,
+                            subKey,
+                            e.target.selectionStart
+                          );
+                        }}
+                        className="bg-gray-bg border border-[#3e3e43] rounded-sm p-2 w-full mt-2"
+                        value={JSON.stringify(param.placeholder, null, 2)}
+                      />
+                    ) : (
+                      <input
+                        ref={(el) => setRef(el, index, subKey)}
+                        onChange={(e) => {
+                          handleOrdinaryParamChange(
+                            e.target.value || "0x",
+                            index,
+                            subKey
+                          );
+                        }}
+                        className="bg-gray-bg border border-[#3e3e43] rounded-sm p-2 w-full mt-2"
+                        value={param.placeholder}
+                      />
+                    )}
+                  </div>
+                )}
             </>
           )
         }
@@ -1037,10 +1086,6 @@ const Builder = () => {
   };
 
   //My test for select
-
-  const [selecteda, setSelectedA] = useState<string>(MAINNET_RPC_URL)
-  const [selectedb, setSelectedB] = useState<number>(0)
-  console.log("SEKECtEDA", selecteda)
   return (
     <>
       <div className="lg:flex lg:m-5 md:m-3 bg-black border-[#ff4b00] text-sm">
@@ -1093,8 +1138,8 @@ const Builder = () => {
                     { label: "Goerli", value: GOERLI_RPC_URL },
                     { label: "Sepolia", value: SEPOLIA_RPC_URL }
                   ]}
-                  selected={selecteda}
-                  setSelected={setSelectedA} />
+                  selected={rpcUrl}
+                  setSelected={setRpcUrl} />
                 <p
                   onClick={() => {
                     getCustomRpcUrl();
@@ -1150,18 +1195,21 @@ const Builder = () => {
             <Select options={Methods.map((method, index) => {
               return {
                 label: method.name,
-                value: index
+                value: method.name
               }
             })}
-              selected={selectedb}
-              setSelected={(index: number) => {
-                const latestParamsArray = Methods[index].params
-                  ? transformParamsToArray(Methods[index].params)
+              selected={method.name}
+              setSelected={(option: string) => {
+                const selectedMethod = Methods.find((element) => element.name == option)
+                if (!selectedMethod)
+                  return
+
+                const latestParamsArray = selectedMethod.params
+                  ? transformParamsToArray(selectedMethod.params)
                   : [];
 
-                setMethod(Methods[index]);
+                setMethod(selectedMethod);
                 setParamsArray(latestParamsArray);
-                setSelectedB(index)
               }} />
 
 
